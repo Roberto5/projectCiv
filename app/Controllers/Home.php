@@ -5,7 +5,8 @@ class Home extends BaseController
 	public function index()
 	{
 		//return view('welcome_message');
-		return $this->renderWithLayout('prova', array('script'=>array('home.js'),'style'=>array('style.css','theme.css')));
+		$session=session();
+		return $this->renderWithLayout('prova', array('user'=>$session->get('user')));
 	}
 
 	//--------------------------------------------------------------------

@@ -11,7 +11,7 @@ class App extends BaseConfig
     public $title='projectCiv';
     public $layout='layouts/default.html';
     public $description='';
-    public $script=array('main.js','menu.js');
+    //public $script=array('main.js','menu.js');
 
 	/*
 	|--------------------------------------------------------------------------
@@ -189,11 +189,11 @@ class App extends BaseConfig
 	| except for 'cookie_prefix' and 'cookie_httponly', which are ignored here.
 	|
 	*/
-	public $sessionDriver            = 'CodeIgniter\Session\Handlers\FileHandler';
-	public $sessionCookieName        = 'ci_session';
+	public $sessionDriver            = 'CodeIgniter\Session\Handlers\DatabaseHandler';
+	public $sessionCookieName        = 'pc_session';
 	public $sessionExpiration        = 7200;
-	public $sessionSavePath          = WRITEPATH . 'session';
-	public $sessionMatchIP           = false;
+	public $sessionSavePath          = 'ci_sessions';
+	public $sessionMatchIP           = true;
 	public $sessionTimeToUpdate      = 300;
 	public $sessionRegenerateDestroy = false;
 
