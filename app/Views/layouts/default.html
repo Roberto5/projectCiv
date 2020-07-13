@@ -14,6 +14,18 @@
 		{/style}
 	</head>
 	<body>
+		<div id="menu">
+			<a href="{baseURL}">Home</a>
+			{if $login!='true'}
+			<!-- unregister user -->
+			<a href="{baseURL}/login">Login</a>
+			<a href="{baseURL}/reg">{+ lang app.REGBUTTON +}</a>
+			{else}
+			<!-- register user -->
+			<a href="{baseURL}/login/logout">Logout</a>
+			<!-- @todo add profile -->
+			{endif}
+		</div>
 		{! content !}
 	</body>
 </html>

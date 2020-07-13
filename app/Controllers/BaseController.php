@@ -60,7 +60,8 @@ class BaseController extends Controller
 	        'title'=>'',
 	        'description'=>lang('app.DESCRIPTION'),
 	        'script'=>array(),
-	        'style'=>array()
+	        'style'=>array(),
+	        'login'=>'false'
 	    );
 	    //get title param
 	    if (array_key_exists('title',$param)) $dataLayout['title']=$param['title'];
@@ -102,9 +103,13 @@ class BaseController extends Controller
 	    }
 	        //d($dataLayout);
 	    //@todo add other thing
+	    
+	    //get session
+	    if ($this->session->get('id')) $dataLayout['login']='true';
 	    $parser = \Config\Services::parser();
+	    $dataLayout['baseURL']=base_url();
 	    $dataLayout['content']= $parser->setData($param)->render($view,$param);
-	    return $parser->setData($dataLayout)->render($layout);
+	    return $parser->setData($dataLayout)->render($layout,$dataLayout);
 	}
 
 }
