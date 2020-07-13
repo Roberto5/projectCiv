@@ -9,8 +9,9 @@ class Login extends BaseController
          * test login
          */
         $session = session();
-        $session->set("user",'test');
-        //return $this->renderWithLayout('prova', array());
+        
+        
+        return $this->renderWithLayout('login.html', array());
     }
     
     //--------------------------------------------------------------------
