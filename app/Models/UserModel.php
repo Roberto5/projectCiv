@@ -28,4 +28,17 @@ class UserModel extends Model {
     ];
     protected $validationMessages = [];
     protected $skipValidation     = false;
+    function getLoginForm($action='') {
+        helper('form');
+        $form=form_open($action,array('class'=>'login'));
+        $form.='<div>';
+        $form.=form_input(array('name'=>'user'),'',['placeholder' => 'username']);
+        $form.='</div><div>';
+        $form.=form_password(array('name'=>'password'),'',['placeholder' => 'password']);
+        $form.='</div>';
+        $form.=form_submit('','Login');
+        $form.=form_close();
+        //d($form);
+        return $form;
+    }
 }
