@@ -39,11 +39,11 @@ class UserModel extends Model {
         //d($form);
         return $form;
     }
-    function getRegForm($action='') {
+    function getRegForm($action='',$username='') {
         helper('form');
         $form=form_open($action,array('class'=>'register'));
         $form.='<div>';
-        $form.=form_input(array('name'=>'user'),'',['placeholder' => 'username']);
+        $form.=form_input(array('name'=>'user'),$username,['placeholder' => 'username']);
         $form.='</div><div>';
         $form.=form_password(array('name'=>'password'),'',['placeholder' => 'password']);
         $form.='</div><div>';

@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 class Reg extends BaseController {
-    public function index() {
+    public function index($username) {
         $user=model('App\Models\UserModel');
         $error='';
         if ($this->request->getMethod()=="post") {
@@ -23,7 +23,7 @@ class Reg extends BaseController {
                     $error.="<div>$e</div>";
             }
         }
-        $form=$user->getRegForm();
+        $form=$user->getRegForm('',$username);
         return $this->renderWithLayout('reg.html',array('form'=>$form,'error'=>$error));
     }
 }
