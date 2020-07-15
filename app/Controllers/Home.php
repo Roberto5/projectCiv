@@ -6,7 +6,9 @@ class Home extends BaseController
 	{
 		//return view('welcome_message');
 		$session=session();
-		return $this->renderWithLayout('prova', array('user'=>$session->get('user')));
+		if ($this->session->get('id')) $view='map.html';
+		else $view='index.html';
+		return $this->renderWithLayout($view, array('user'=>$session->get('user')));
 	}
 
 	//--------------------------------------------------------------------

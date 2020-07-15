@@ -27,6 +27,10 @@ class BaseController extends Controller
 	 * @var array
 	 */
 	protected $helpers = [];
+	/**
+	 * 
+	 * @var \CodeIgniter\Session\Session
+	 */
 	protected $session;
 
 	/**
