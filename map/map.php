@@ -1,7 +1,8 @@
 <?php 
+use phpDocumentor\Reflection\Types\False_;
+
 //merge 2 image whit arc
 
-error_reporting(-1);
 
 class tile {
     private $r=array();
@@ -29,19 +30,15 @@ class tile {
                 $this->$key=$value;
             }
         }
-        preg_match("/Random/", $this->func,$find);
-        if (count($find)>0) {
-            $init='init'.$this->func;
-            $this->$init();
-        }
+        /**/
         
     }
     function setFunc($func) {
         $this->func=$func;
-        if (preg_match("/Random/", $this->func)) {
+        /*if (preg_match("/Random/", $this->func)) {
             $init='init'.$this->func;
             $this->$init();
-        }
+        }*/
     }
     
     function initCircleRandom() {
@@ -99,7 +96,12 @@ class tile {
         return $x<$this->r[$y];
     }
     function mergeImg($d,$s) {
-        $new=imagecreate($this->dim, $this->dim);
+        preg_match("/Random/", $this->func,$find);
+        if (count($find)>0) {
+            $init='init'.$this->func;
+            $this->$init();
+        }
+        $new= imagecreatetruecolor($this->dim, $this->dim);
         $func=$this->func;
         for ($i = 0; $i < $this->dim; $i++) {
             for ($j = 0; $j < $this->dim; $j++) {
@@ -113,55 +115,125 @@ class tile {
 }
 
 
+function combineTile($dest,$source) {
+    $d=imagecreatefromjpeg($dest);
+    $s=imagecreatefromjpeg($source);
+    
+    $dim=imagesx($d);
+    $rad=$dim/2;
+    $texture= imagecreatetruecolor($dim*3, $dim*3);
+    $imghandle=new tile(array('func'=>'CircleRandom',
+        'dim'=>$dim,
+        'rad'=>$rad,
+        'delta'=>10
+    ));
+    
+    $new=$imghandle->mergeImg($d,$s);
+    //angle
+    imagecopy($texture, $new, $dim*2, $dim*2, 0, 0, $dim, $dim);
+    imagedestroy($new);
+    $new=$imghandle->mergeImg($d,$s);
+    $rotate=imagerotate($new, 90, 0);
+    imagecopy($texture, $rotate, $dim*2, 0, 0, 0, $dim, $dim);
+    imagedestroy($new);
+    imagedestroy($rotate);
+    
+    $new=$imghandle->mergeImg($d,$s);
+    $rotate=imagerotate($new, 180, 0);
+    imagecopy($texture, $rotate, 0, 0, 0, 0, $dim, $dim);
+    imagedestroy($new);
+    imagedestroy($rotate);
+    
+    $new=$imghandle->mergeImg($d,$s);
+    $rotate=imagerotate($new, 270, 0);
+    imagecopy($texture, $rotate, 0, $dim*2, 0, 0, $dim, $dim);
+    imagedestroy($new);
+    imagedestroy($rotate);
+    // side
+    //down
+    $imghandle->setFunc('LinearXRandom');
+    $new=$imghandle->mergeImg($d,$s);
+    imagecopy($texture, $new, $dim, $dim*2, 0, 0, $dim, $dim);
+    imagedestroy($new);
+    //dx
+    $new=$imghandle->mergeImg($d,$s);
+    $rotate=imagerotate($new, 90, 0);
+    imagecopy($texture, $rotate, $dim*2, $dim, 0, 0, $dim, $dim);
+    imagedestroy($new);
+    imagedestroy($rotate);
+    //up
+    $new=$imghandle->mergeImg($d,$s);
+    $rotate=imagerotate($new, 180, 0);
+    imagecopy($texture, $rotate, $dim, 0, 0, 0, $dim, $dim);
+    imagedestroy($new);
+    imagedestroy($rotate);
+    //sx
+    $new=$imghandle->mergeImg($d,$s);
+    $rotate=imagerotate($new, 270, 0);
+    imagecopy($texture, $rotate, 0, $dim, 0, 0, $dim, $dim);
+    imagedestroy($new);
+    imagedestroy($rotate);
+    
+    imagecopy($texture, $d, $dim, $dim, 0, 0, $dim, $dim);
+    return $texture;
+}
+
+$images=array(
+    'area-0.jpg',
+    'area-1.jpg',
+    'area-2.jpg',
+    'area-3.jpg',
+    'area-4.jpg',
+    'area-5.jpg',
+);
+if ($_GET['debug']) {
+    $sprite=combineTile($images[$_GET['d']],$images[$_GET['s']]);
+}
+else {
+    $sprite= imagecreatetruecolor(900, 900);
+    $x=0;
+    /*$black = imagecolorallocate($sprite, 0, 0, 0);
+    imagecolortransparent($sprite, $black);*/
+    //imagealphablending($sprite, false);
+    foreach ($images as $i) {
+        $y=0;
+        foreach ($images as $j) {
+            if ($i!=$j) {
+                $texture=combineTile($i,$j); 
+                /*imagealphablending($texture, true);
+                imagesavealpha($texture, true);
+                
+                imagealphablending($sprite, true);
+                imagesavealpha($sprite, true);*/
+                /*$black = imagecolorallocate($texture, 0, 0, 0);
+                imagecolortransparent($texture, $black);*/
+                imagecopy($sprite, $texture, $x, $y, 0, 0, 150, 150);
+                imagedestroy($texture);
+                
+            }
+            else {
+                $img=imagecreatefromjpeg($i);
+                imagecopy($sprite, $img, $x+50, $y+50, 0, 0, 50, 50);
+                imagedestroy($img);
+            }
+            $y+=150;
+        }
+        $x+=150;
+    }
+}
+/*
+
+}*/
 
 
 
-
-
-$d=imagecreatefromjpeg($_GET['d']);
-$s=imagecreatefromjpeg($_GET['s']);
-
-$dim=imagesx($d);
-$rad=$dim/2;
-$texture=imagecreate($dim*3, $dim*3);
 header("Content-type: image/png");
-$imghandle=new tile(array('func'=>'CircleRandom',
-    'dim'=>$dim,
-    'rad'=>$rad,
-    'delta'=>5
-));
+
+//$texture=combineTile($_GET['d'],$_GET['s']);
+
 //print_r($imghandle);
-$new=$imghandle->mergeImg($d,$s);
-//angle
-imagecopy($texture, $new, $dim*2, $dim*2, 0, 0, $dim, $dim);
-imagedestroy($new);
-$new=$imghandle->mergeImg($d,$s);
-$rotate=imagerotate($new, 90, 0);
-imagecopy($texture, $rotate, $dim*2, 0, 0, 0, $dim, $dim);
-imagedestroy($new);
-imagedestroy($rotate);
 
-$new=$imghandle->mergeImg($d,$s);
-$rotate=imagerotate($new, 180, 0);
-imagecopy($texture, $rotate, 0, 0, 0, 0, $dim, $dim);
-imagedestroy($new);
-imagedestroy($rotate);
-
-$new=$imghandle->mergeImg($d,$s);
-$rotate=imagerotate($new, 270, 0);
-imagecopy($texture, $rotate, 0, $dim*2, 0, 0, $dim, $dim);
-imagedestroy($new);
-imagedestroy($rotate);
-// laterali
-$imghandle->setFunc('LinearXRandom');
-$new=$imghandle->mergeImg($d,$s);
-imagecopy($texture, $new, $dim, $dim*2, 0, 0, $dim, $dim);
-imagedestroy($new);
-
-
-imagepng($texture);
-imagedestroy($d);
-imagedestroy($s);
-
+imagepng($sprite);
+imagedestroy($sprite);
 
 ?>
