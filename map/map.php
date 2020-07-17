@@ -186,7 +186,7 @@ $images=array(
     'area-4.jpg',
     'area-5.jpg',
 );
-if ($_GET['debug']) {
+if (isset($_GET['debug'])&& $_GET['debug']) {
     $sprite=combineTile($images[$_GET['d']],$images[$_GET['s']]);
 }
 else {
