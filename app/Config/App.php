@@ -11,7 +11,7 @@ class App extends BaseConfig
     public $title='projectCiv';
     public $layout='layouts/default.html';
     //public $script=array('main.js','menu.js');
-    public $style=array('css/main.css');
+    //public $style=array('css/main.css');
 
 	/*
 	|--------------------------------------------------------------------------

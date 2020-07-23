@@ -12,5 +12,17 @@ class Home extends BaseController
 	}
 
 	//--------------------------------------------------------------------
-
+    public function mapstylegen() {
+        $map=array();
+        $dim=30;
+        $zoom='';
+        for ($i = 0; $i < $dim; $i++) {
+            $map[$i]=array('with'=>$dim*50,'divx'=>array());
+            for ($j = 0; $j < $dim; $j++) {
+                $map[$i]['divx'][$j]=array('zoom'=>$zoom);
+            }
+        }
+        return $this->renderWithLayout('genmap', array('divy'=>$map,'dim'=>$dim/*,'script'=>array('js/genmap.js')*/));
+        
+    }
 }
