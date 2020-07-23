@@ -2,6 +2,7 @@
 
 class Home extends BaseController
 {
+    private $zoom=array(5,2,1,0.5);
 	public function index()
 	{
 		//return view('welcome_message');
@@ -17,11 +18,11 @@ class Home extends BaseController
         $nArea=6;
         $dimTile=50;
         $dimTileset=900;
-        $zoom=array(5,2,1);
+        $zoom=$this->zoom;
         $css='.tile {
         width: 50px;
     height: 50px;
-    background: url(../img/tileset.png);
+    background: url('.base_url().'/img/tileset.png);
     display: inline-block;
     }
     .map {
@@ -67,16 +68,18 @@ class Home extends BaseController
         echo $css;
         
     }
-    public function mapgen() {
+    public function mapgen($zoom=1) {
         $map=array();
         $dim=30;
-        $zoom=1;
+        if (($zoom<0)||($zoom>count($this->zoom))) {
+            $zoom=0;
+        }
         for ($i = 0; $i < $dim; $i++) {
-            $map[$i]=array('with'=>$dim*50,'divx'=>array());
+            $map[$i]=array('with'=>$dim*50/$this->zoom[$zoom],'divx'=>array());
             for ($j = 0; $j < $dim; $j++) {
                 $map[$i]['divx'][$j]=array('zoom'=>$zoom);
             }
         }
-        return $this->renderWithLayout('genmap', array('zoom'=>$zoom,'divy'=>$map,'dim'=>$dim,'style'=>array('mapstylegen')/*,'script'=>array('js/genmap.js')*/));
+        return $this->renderWithLayout('genmap', array('zoom'=>$zoom,'divy'=>$map,'dim'=>$dim,'style'=>array('home/mapstylegen')/*,'script'=>array('js/genmap.js')*/));
     }
 }
