@@ -1,0 +1,16 @@
+
+<script>
+	gen=new genmap({dim:{dim} });
+	
+</script>
+<div>
+{divy}<div class="map zoom{zoom}" style="width: {with}px;">{divx}<div class="tile zoom{zoom} area-0"></div>{/divx}</div>{/divy}
+</div>
+<div>info:
+<div id="info">
+ground Rate:	
+<input id="groundRate" value="{groundRate}" type="number" {noparse} onChange="if (this.checkValidity()) {gen.groundRate=this.value;this.prevValue=this.value;} else {if (this.prevValue==null) this.prevValue=this.defaultValue; else this.value=this.prevValue;}" min="0" max="100" step="1" {/noparse}/>
+</div>
+</div>
+<button onclick="gen.generate();">generate map</button>
+<button onclick="s=gen.next();this.textContent='next step ('+s+')';" id="nextButon">next step</button>

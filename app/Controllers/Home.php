@@ -57,9 +57,9 @@ class Home extends BaseController
         echo $css;
         
     }
-    public function mapgen($zoom=1) {
+    public function mapgen($zoom=0) {
         $map=array();
-        $dim=30;
+        $dim=50;
         if (($zoom<0)||($zoom>count($this->zoom))) {
             $zoom=0;
         }
@@ -69,6 +69,6 @@ class Home extends BaseController
                 $map[$i]['divx'][$j]=array('zoom'=>$zoom);
             }
         }
-        return $this->renderWithLayout('genmap', array('zoom'=>$zoom,'divy'=>$map,'dim'=>$dim,'style'=>array('home/mapstylegen'),'script'=>array('js/genmap.js')));
+        return $this->renderWithLayout('genmap.html', array('groundRate'=>50,'zoom'=>$zoom,'divy'=>$map,'dim'=>$dim,'style'=>array('home/mapstylegen'),'script'=>array('js/genmap.js')));
     }
 }
