@@ -10,7 +10,7 @@ class App extends BaseConfig
     
     public $title='projectCiv';
     public $layout='layouts/default.html';
-    //public $script=array('main.js','menu.js');
+    public $script=array('js/jquery-3.5.1.min.js');
     //public $style=array('css/main.css');
 
 	/*

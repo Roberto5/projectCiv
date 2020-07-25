@@ -27,18 +27,7 @@ class Home extends BaseController
     }
     .map {
         height: 50px;
-    }';/*
-    .zoom {
-        height: 10px;
-    }
-    .zoom2 {
-        height: 25px;
-    }
-    .tile.zoom {
-        width: 10px;
-        height: 10px;
-        background-size:180px 180px;
-    }';*/
+    }';
         foreach ($zoom as $key => $value) {
             if ($value!=1) {
                 $dim=($dimTile/$value).'px';
@@ -80,6 +69,6 @@ class Home extends BaseController
                 $map[$i]['divx'][$j]=array('zoom'=>$zoom);
             }
         }
-        return $this->renderWithLayout('genmap', array('zoom'=>$zoom,'divy'=>$map,'dim'=>$dim,'style'=>array('home/mapstylegen')/*,'script'=>array('js/genmap.js')*/));
+        return $this->renderWithLayout('genmap', array('zoom'=>$zoom,'divy'=>$map,'dim'=>$dim,'style'=>array('home/mapstylegen'),'script'=>array('js/genmap.js')));
     }
 }
